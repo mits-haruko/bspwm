@@ -1,0 +1,18 @@
+#Basic Config
+ncmpcpp_directory = "~/.config/ncmpcpp"
+mpd_music_dir = "~/Music"
+message_delay_time = "1"
+visualizer_type = "spectrum"
+startup_screen = "playlist" 
+
+#Colors and Themes
+colors_enabled = "yes"
+user_interface = "alternative"
+progressbar_elapsed_color = "blue"
+main_window_color = "blue"
+
+#Display Modes
+playlist_editor_display_mode = "columns"
+search_engine_display_mode = "columns"
+browser_display_mode = "columns"
+playlist_display_mode = "columns"
