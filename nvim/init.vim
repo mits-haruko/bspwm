@@ -61,7 +61,11 @@ call plug#begin('~/.config/nvim/autoload/plugged')
 
      " Coc
      Plug 'neoclide/coc.nvim', {'branch': 'release'}
-     
+    
+     " Telescope 
+     Plug 'nvim-lua/plenary.nvim'
+     Plug 'nvim-telescope/telescope.nvim'
+
      " vim-kitty syntax
      Plug 'fladson/vim-kitty'
      
@@ -69,11 +73,20 @@ call plug#begin('~/.config/nvim/autoload/plugged')
      Plug 'voldikss/vim-floaterm'     
      let g:floaterm_keymap_new = '<Leader>ft'
      let g:floaterm_keymap_toggle = '<Leader>t'
-   
+
+     " Folding
+     Plug 'kevinhwang91/nvim-ufo'
+     Plug 'kevinhwang91/promise-async'
+
+     " NERDTree
+     Plug 'preservim/nerdtree'
+     let NERDTreeShowHidden=1
 
 call plug#end()
 
-"Tokyonight theme
+"" COLOR SPECIFICATION
+
+" Tokyonight theme
 
 " Example config in VimScript
 let g:tokyonight_style = "night"
@@ -88,8 +101,9 @@ let g:tokyonight_colors = {
 
 colorscheme tokyonight
 
-let mapleader = "\<space>"
+"" KEYMAPS 
 
+let mapleader = "\<space>"
 
 "  BLines remap
 nnoremap <C-f> :Files<CR>
@@ -97,16 +111,61 @@ nnoremap< <C-g> :Rg<CR>
 nnoremap <C-b> :BLines<CR>
 
 " Startify shortcut
-nmap <C-n> :Startify<CR>
+nmap <C-s> :Startify<CR>
 
 " copen and ccl
 nnoremap <C-c> :copen<CR>
 nnoremap <C-d> :ccl<CR>
 
-
 " Tab remap
-nmap <tab> :tabnext<CR>
+nmap <C-tab> :tabnext<CR>
 " nnoremap <tab> :tabNext<CR>
+
+" NERDTree mappings
+nnoremap <leader>n :NERDTreeToggle<CR>
+nnoremap <C-n> :NERDTree<CR>
+nnoremap <C-t> :NERDTreeFocus<CR>
+nnoremap <C-f> :NERDTreeFind<CR>
+nnoremap <leader>b :Bookmark<CR>
+
+" Save text folding
+autocmd BufWinLeave *.* mkview
+"autocmd BufWinEnter *.* silent loadview
 
 " Numbering
 set number
+
+syntax enable
+
+" Startify correct order display
+let g:startify_lists = [
+      \ {'type': 'bookmarks', 'header': [ ' Bookmarks']  },
+      \ {'type': 'dir',       'header': [' Current Directory']},
+      \ { 'type': 'files',    'header': ['  Files']  },
+      \]
+
+" Startify with NERDTree bookmarks
+let g:startify_bookmarks = systemlist("cut -sd' ' -f 2- ~/.NERDTreeBookmarks")
+
+" Startify fujiwara meme
+let g:startify_custom_header = [
+      \
+    \'',
+    \'',
+    \'        ⢀⣴⡾⠃⠄⠄⠄⠄⠄⠈⠺⠟⠛⠛⠛⠛⠻⢿⣿⣿⣿⣿⣶⣤⡀  ',
+    \'      ⢀⣴⣿⡿⠁⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⣸⣿⣿⣿⣿⣿⣿⣿⣷ ',
+    \'     ⣴⣿⡿⡟⡼⢹⣷⢲⡶⣖⣾⣶⢄⠄⠄⠄⠄⠄⢀⣼⣿⢿⣿⣿⣿⣿⣿⣿⣿ ',
+    \'    ⣾⣿⡟⣾⡸⢠⡿⢳⡿⠍⣼⣿⢏⣿⣷⢄⡀⠄⢠⣾⢻⣿⣸⣿⣿⣿⣿⣿⣿⣿ ',
+    \'  ⣡⣿⣿⡟⡼⡁⠁⣰⠂⡾⠉⢨⣿⠃⣿⡿⠍⣾⣟⢤⣿⢇⣿⢇⣿⣿⢿⣿⣿⣿⣿⣿ ',
+    \' ⣱⣿⣿⡟⡐⣰⣧⡷⣿⣴⣧⣤⣼⣯⢸⡿⠁⣰⠟⢀⣼⠏⣲⠏⢸⣿⡟⣿⣿⣿⣿⣿⣿ ',
+    \' ⣿⣿⡟⠁⠄⠟⣁⠄⢡⣿⣿⣿⣿⣿⣿⣦⣼⢟⢀⡼⠃⡹⠃⡀⢸⡿⢸⣿⣿⣿⣿⣿⡟ ',
+    \' ⣿⣿⠃⠄⢀⣾⠋⠓⢰⣿⣿⣿⣿⣿⣿⠿⣿⣿⣾⣅⢔⣕⡇⡇⡼⢁⣿⣿⣿⣿⣿⣿⢣ ',
+    \' ⣿⡟⠄⠄⣾⣇⠷⣢⣿⣿⣿⣿⣿⣿⣿⣭⣀⡈⠙⢿⣿⣿⡇⡧⢁⣾⣿⣿⣿⣿⣿⢏⣾ ',
+    \' ⣿⡇⠄⣼⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⢻⠇⠄⠄⢿⣿⡇⢡⣾⣿⣿⣿⣿⣿⣏⣼⣿ ',
+    \' ⣿⣷⢰⣿⣿⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⢰⣧⣀⡄⢀⠘⡿⣰⣿⣿⣿⣿⣿⣿⠟⣼⣿⣿ ',
+    \' ⢹⣿⢸⣿⣿⠟⠻⢿⣿⣿⣿⣿⣿⣿⣿⣶⣭⣉⣤⣿⢈⣼⣿⣿⣿⣿⣿⣿⠏⣾⣹⣿⣿ ',
+    \' ⢸⠇⡜⣿⡟⠄⠄⠄⠈⠙⣿⣿⣿⣿⣿⣿⣿⣿⠟⣱⣻⣿⣿⣿⣿⣿⠟⠁⢳⠃⣿⣿⣿ ',
+    \'  ⣰⡗⠹⣿⣄⠄⠄⠄⢀⣿⣿⣿⣿⣿⣿⠟⣅⣥⣿⣿⣿⣿⠿⠋  ⣾⡌⢠⣿⡿⠃ ',
+    \' ⠜⠋⢠⣷⢻⣿⣿⣶⣾⣿⣿⣿⣿⠿⣛⣥⣾⣿⠿⠟⠛⠉            ',
+    \'',
+    \  ]
